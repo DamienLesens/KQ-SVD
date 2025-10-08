@@ -47,7 +47,7 @@ def computing_cache(model,expname,list_seq,num_seq):
             #now Q_layer has shape (hkv, seq_len, head_dim)
 
             for kind, tensor in zip(['k', 'v', 'q'], [K_layer, V_layer, Q_layer]):
-                path = os.path.join(os.environ["SCRATCH"], expname, kind, str(l))
+                path = os.path.join(expname, kind, str(l))
                 os.makedirs(path, exist_ok=True)
                 torch.save(tensor, os.path.join(path, f"{j}.pt"))
 
@@ -99,7 +99,7 @@ def computing_cache_stack(model,expname,list_seq,num_seq):
             #now Q_layer has shape (hkv, seq_len, head_dim)
 
             for kind, tensor in zip(['k', 'v', 'q'], [K_layer, V_layer, Q_layer]):
-                path = os.path.join(os.environ["SCRATCH"], expname, kind, str(l))
+                path = os.path.join( expname, kind, str(l))
                 os.makedirs(path, exist_ok=True)
                 torch.save(tensor, os.path.join(path, f"{j}.pt"))
 
@@ -133,8 +133,8 @@ def compute_proj_SVD_mem(model,srcname,num_seq,resname,save=True):
         list_blockk = []
         list_blockv = []
 
-        pathk = os.environ["SCRATCH"]+"/"+srcname+"/k/"+str(l)
-        pathv = os.environ["SCRATCH"]+"/"+srcname+"/v/"+str(l)
+        pathk = srcname+"/k/"+str(l)
+        pathv = srcname+"/v/"+str(l)
 
         for j in range(num_seq):
             tk = torch.load(pathk+"/"+ str(j)+".pt")
@@ -179,7 +179,7 @@ def compute_proj_SVD_mem(model,srcname,num_seq,resname,save=True):
         sv = torch.stack(list_sv,dim=0)
 
         if save:
-            pathbase = os.path.join(os.environ["SCRATCH"], resname, str(l))
+            pathbase = os.path.join(resname, str(l))
             os.makedirs(pathbase,exist_ok=True)
             torch.save(sk,os.path.join(pathbase,"speck.pt"))
             torch.save(sv,os.path.join(pathbase,"specv.pt"))
@@ -210,9 +210,9 @@ def compute_proj_SVD_Eigen_mem(model_config,srcname,num_seq,resname,alpha=1,save
         list_blockv = []
         list_blockq = []
 
-        pathk = os.environ["SCRATCH"]+"/"+srcname+"/k/"+str(l)
-        pathv = os.environ["SCRATCH"]+"/"+srcname+"/v/"+str(l)
-        pathq = os.environ["SCRATCH"]+"/"+srcname+"/q/"+str(l)
+        pathk = srcname+"/k/"+str(l)
+        pathv = srcname+"/v/"+str(l)
+        pathq = srcname+"/q/"+str(l)
 
         for j in range(num_seq):
             tk = torch.load(pathk+"/"+ str(j)+".pt")
@@ -275,7 +275,7 @@ def compute_proj_SVD_Eigen_mem(model_config,srcname,num_seq,resname,alpha=1,save
         sv = torch.stack(list_sv,dim=0)
 
         if save:
-            pathbase = os.path.join(os.environ["SCRATCH"], resname, str(l))
+            pathbase = os.path.join(resname, str(l))
             os.makedirs(pathbase,exist_ok=True)
             torch.save(sk,os.path.join(pathbase,"speck.pt"))
             torch.save(sv,os.path.join(pathbase,"specv.pt"))
@@ -313,9 +313,9 @@ def compute_proj_KQT_mem(model,srcname,num_seq,resname,save=True):
         list_blockv = []
         list_blockq = []
 
-        pathk = os.environ["SCRATCH"]+"/"+srcname+"/k/"+str(l)
-        pathv = os.environ["SCRATCH"]+"/"+srcname+"/v/"+str(l)
-        pathq = os.environ["SCRATCH"]+"/"+srcname+"/q/"+str(l)
+        pathk = srcname+"/k/"+str(l)
+        pathv = srcname+"/v/"+str(l)
+        pathq = srcname+"/q/"+str(l)
 
         for j in range(num_seq):
             tk = torch.load(pathk+"/"+ str(j)+".pt")
@@ -429,7 +429,7 @@ def compute_proj_KQT_mem(model,srcname,num_seq,resname,save=True):
 
         if save:
             print("saving")
-            pathbase = os.path.join(os.environ["SCRATCH"], resname, str(l))
+            pathbase = os.path.join(resname, str(l))
             os.makedirs(pathbase,exist_ok=True)
             torch.save(sk,os.path.join(pathbase,"speck.pt"))
             torch.save(sv,os.path.join(pathbase,"specv.pt"))
@@ -470,9 +470,9 @@ def compute_proj_KQT_DRONE_mem(model,srcname,num_seq,resname,save=True):
         list_blockv = []
         list_blockq = []
 
-        pathk = os.environ["SCRATCH"]+"/"+srcname+"/k/"+str(l)
-        pathv = os.environ["SCRATCH"]+"/"+srcname+"/v/"+str(l)
-        pathq = os.environ["SCRATCH"]+"/"+srcname+"/q/"+str(l)
+        pathk = srcname+"/k/"+str(l)
+        pathv = srcname+"/v/"+str(l)
+        pathq = srcname+"/q/"+str(l)
 
         for j in range(num_seq):
             tk = torch.load(pathk+"/"+ str(j)+".pt")
@@ -581,7 +581,7 @@ def compute_proj_KQT_DRONE_mem(model,srcname,num_seq,resname,save=True):
 
         if save:
             print("saving")
-            pathbase = os.path.join(os.environ["SCRATCH"], resname, str(l))
+            pathbase = os.path.join(resname, str(l))
             os.makedirs(pathbase,exist_ok=True)
             torch.save(sk,os.path.join(pathbase,"speck.pt"))
             torch.save(sv,os.path.join(pathbase,"specv.pt"))
@@ -617,9 +617,9 @@ def cache_right_singular_basis_mem(model, srcname,num_seq,resname,save=True):
         list_blockv = []
         list_blockq = []
 
-        pathk = os.environ["SCRATCH"]+"/"+srcname+"/k/"+str(l)
-        pathv = os.environ["SCRATCH"]+"/"+srcname+"/v/"+str(l)
-        pathq = os.environ["SCRATCH"]+"/"+srcname+"/q/"+str(l)
+        pathk = srcname+"/k/"+str(l)
+        pathv = srcname+"/v/"+str(l)
+        pathq = srcname+"/q/"+str(l)
 
         for j in range(num_seq):
             tk = torch.load(pathk+"/"+ str(j)+".pt")
@@ -655,7 +655,7 @@ def cache_right_singular_basis_mem(model, srcname,num_seq,resname,save=True):
         #batching SVDs does not work because we are allocating too much mem
         for i in range(hkv):
             print("     ",i)
-            pathbase = os.path.join(os.environ["SCRATCH"], resname, str(l), str(i))
+            pathbase = os.path.join(resname, str(l), str(i))
             os.makedirs(pathbase)
 
             Ki = bigk[i]
@@ -710,9 +710,9 @@ def compute_proj_test_mem(model,srcname,num_seq,resname,r=110,save=True):
         list_blockv = []
         list_blockq = []
 
-        pathk = os.environ["SCRATCH"]+"/"+srcname+"/k/"+str(l)
-        pathv = os.environ["SCRATCH"]+"/"+srcname+"/v/"+str(l)
-        pathq = os.environ["SCRATCH"]+"/"+srcname+"/q/"+str(l)
+        pathk = srcname+"/k/"+str(l)
+        pathv = srcname+"/v/"+str(l)
+        pathq = srcname+"/q/"+str(l)
 
         for j in range(num_seq):
             tk = torch.load(pathk+"/"+ str(j)+".pt")
@@ -807,7 +807,7 @@ def compute_proj_test_mem(model,srcname,num_seq,resname,r=110,save=True):
 
         if save:
             print("saving")
-            pathbase = os.path.join(os.environ["SCRATCH"], resname, str(l))
+            pathbase = os.path.join(resname, str(l))
             os.makedirs(pathbase,exist_ok=True)
             torch.save(sk,os.path.join(pathbase,"speck.pt"))
             torch.save(sv,os.path.join(pathbase,"specv.pt"))
