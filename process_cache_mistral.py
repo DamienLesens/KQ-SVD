@@ -9,8 +9,6 @@ def computing_cache(model,expname,list_seq,num_seq):
     It stores K,Q,V cache, so it needs to be used with a model that can handle CustomCacheMistral.
     The function then stacks the cache tensors for each sequence along the time dimension.
     If GQA, query cache is averaged inside each head group
-    The result is stored in
-    $SCRATCH/expname/[k or q or v]/layer_index/sequence_index.pt
     """
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     
@@ -40,11 +38,12 @@ def computing_cache(model,expname,list_seq,num_seq):
             V_layer = past_key_values[l][1][0]  # shape: (hkv, seq_len, head_dim)
             Q_layer = past_key_values[l][2][0]  # shape: (h, seq_len, head_dim)
 
-            if hkv<h:#if GQA average queries inside each group
+            if hkv<h:#if GQA stacking
                 h,T,d = Q_layer.shape
-                Q_layer = Q_layer.view(hkv, -1, T, d).mean(dim=1)
+                Q_layer = Q_layer.view(hkv, -1, T, d)
+                Q_layer = Q_layer.reshape(hkv, -1, d)
 
-            #now Q_layer has shape (hkv, seq_len, head_dim)
+            
 
             for kind, tensor in zip(['k', 'v', 'q'], [K_layer, V_layer, Q_layer]):
                 path = os.path.join(expname, kind, str(l))
@@ -59,7 +58,6 @@ def compute_proj_SVD_mem(model,srcname,num_seq,resname,save=True):
     This function computes SVDs on the K and V cache stored in $SCRATCH/srcname.
     For each layer, it stacks the first num_seq tensors it finds in the layer folder along the time dimension
     It then performs an SVD
-    It stores both the right singular vectors and the spectrum in $SCRAFT/resname/layer_index/file
     file is:
         -speck.pt: spectrum of K
         -specv.pt: spectrum of V

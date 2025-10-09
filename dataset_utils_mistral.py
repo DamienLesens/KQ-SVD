@@ -3,7 +3,7 @@ from transformers import AutoTokenizer
 import random
 
 
-def get_c4_mistral(nsamples_train, nsamples_test, seed, seqlen, model):
+def get_c4_mistral(c4location,nsamples_train, nsamples_test, seed, seqlen, model):
     """
     This function gets samples from the C4 data set for Mistral models, using the train/test split of the data set
     It passes them through the tokenizer, so it returns tokens
@@ -16,10 +16,10 @@ def get_c4_mistral(nsamples_train, nsamples_test, seed, seqlen, model):
     """
     print("get_c4_mistral")
     traindata = load_dataset(
-        '/network/datasets/c4/c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz'}, split='train'
+        c4location, data_files={'train': 'en/c4-train.00000-of-01024.json.gz'}, split='train'
     )
     valdata = load_dataset(
-        '/network/datasets/c4/c4', data_files={'validation': 'en/c4-validation.00000-of-00008.json.gz'}, split='validation'
+        c4location, data_files={'validation': 'en/c4-validation.00000-of-00008.json.gz'}, split='validation'
     )
 
     # Mistral models use fast tokenizers

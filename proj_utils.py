@@ -10,13 +10,13 @@ def read_proj(model,filename):
     d = model.config.head_dim
     res = []
     for l in range(model.config.num_hidden_layers):
-        projk = torch.load(os.environ["SCRATCH"]+"/"+filename+"/"+str(l)+"/projk.pt")
-        projq = torch.load(os.environ["SCRATCH"]+"/"+filename+"/"+str(l)+"/projq.pt")
+        projk = torch.load(filename+"/"+str(l)+"/projk.pt")
+        projq = torch.load(filename+"/"+str(l)+"/projq.pt")
 
         #print("diff to id KQT:",torch.norm(torch.eye(d).to(device)-projk[0]@(projq[0].T)))
 
-        projv = torch.load(os.environ["SCRATCH"]+"/"+filename+"/"+str(l)+"/projv.pt")
-        projwo = torch.load(os.environ["SCRATCH"]+"/"+filename+"/"+str(l)+"/projw.pt")
+        projv = torch.load(filename+"/"+str(l)+"/projv.pt")
+        projwo = torch.load(filename+"/"+str(l)+"/projw.pt")
 
         #print("diff to id VWO:",torch.norm(torch.eye(d).to(device)-projv[0]@(projwo[0].T)))
 
@@ -33,8 +33,8 @@ def read_spectrums(model,filename):
     """
     res = []
     for l in range(model.config.num_hidden_layers):
-        speck = torch.load(os.path.join(os.environ["SCRATCH"],filename,str(l),"speck.pt"))
-        specv = torch.load(os.path.join(os.environ["SCRATCH"],filename,str(l),"specv.pt"))
+        speck = torch.load(filename,str(l),"speck.pt")
+        specv = torch.load(filename,str(l),"specv.pt")
 
         res.append([speck.detach().to("cpu"),specv.detach().to("cpu")])
     return res
