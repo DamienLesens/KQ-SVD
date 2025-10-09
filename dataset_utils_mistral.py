@@ -1,6 +1,7 @@
 from datasets import load_dataset
 from transformers import AutoTokenizer
 import random
+import torch
 
 
 def get_c4_mistral(c4location,nsamples_train, nsamples_test, seed, seqlen, model):
