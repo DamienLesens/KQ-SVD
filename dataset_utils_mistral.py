@@ -109,7 +109,7 @@ def get_wikitext2_mistral(nsamples, seed, seqlen, model):
     return samples, tokenizer
 
 
-def prepare_mistral_dataset(dataset_name, model_name, nsamples_train=100, nsamples_test=20, 
+def prepare_mistral_dataset(location, dataset_name, model_name, nsamples_train=100, nsamples_test=20, 
                            seed=42, seqlen=2048):
     """
     Prepare dataset for Mistral model training/evaluation.
@@ -126,7 +126,7 @@ def prepare_mistral_dataset(dataset_name, model_name, nsamples_train=100, nsampl
         Tuple of (train_data, test_data, tokenizer)
     """
     if dataset_name.lower() == 'c4':
-        return get_c4_mistral(nsamples_train, nsamples_test, seed, seqlen, model_name)
+        return get_c4_mistral(location, nsamples_train, nsamples_test, seed, seqlen, model_name)
     elif dataset_name.lower() == 'wikitext2':
         train_data = get_wikitext2_mistral(nsamples_train, seed, seqlen, model_name)
         test_data = get_wikitext2_mistral(nsamples_test, seed + 1000, seqlen, model_name)
@@ -236,15 +236,3 @@ def validate_mistral_inputs(input_ids, attention_mask=None, sliding_window=4096)
     
     return True
 
-
-# Compatibility wrapper functions for existing code
-def get_c4(nsamples_train, nsamples_test, seed, seqlen, model):
-    """
-    Compatibility wrapper that automatically detects if model is Mistral.
-    """
-    if 'mistral' in model.lower():
-        return get_c4_mistral(nsamples_train, nsamples_test, seed, seqlen, model)
-    else:
-        # Import and use original function for non-Mistral models
-        from dataset_utils import get_c4 as get_c4_original
-        return get_c4_original(nsamples_train, nsamples_test, seed, seqlen, model)

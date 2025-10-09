@@ -232,7 +232,6 @@ def compute_proj_KQT_mem(model,srcname,num_seq,resname,save=True):
     """
     This function compute projection by doing an SVD of KQ^T
     It forms K,Q,V calibration tensors like compute_proj_SVD_mem or compute_proj_SVD_Eigen_mem.
-    It uses formulas from Damien, not the ones from DRONE, it thus maybe not optimized in terms of runtime
     Saving format is the same than for previous functions
     """
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -310,12 +309,9 @@ def compute_proj_KQT_mem(model,srcname,num_seq,resname,save=True):
             del Us,Vs,QK,QQ,RK,RQ
             torch.cuda.empty_cache()
 
-            # scalingk = 1/torch.sqrt(S)#torch.diag(1/S)
-            # projk = (Qi.T @ V.T) * scalingk[None,:]
-            # projq = (U.T @ Ki).T * scalingk[None,:]#this should work, the bug was not here
             Sigmam1k = torch.diag(1/S)
             projk = Qi.T @ V.T @ Sigmam1k
-            projq = (U.T @ Ki).T#TODO: ? do a square root to get a really sym stuff ?
+            projq = (U.T @ Ki).T
 
             del Qi,Ki,U,V,S
             torch.cuda.empty_cache()
@@ -334,9 +330,7 @@ def compute_proj_KQT_mem(model,srcname,num_seq,resname,save=True):
             del Us,Vs,QV,QW,RV,RW
             torch.cuda.empty_cache()
 
-            # scalingv = 1/torch.sqrt(S)
-            # projv = (WOi.T @ V.T) * scalingv[None,:]
-            # projw = (U.T @ Vi).T * scalingv[None,:]
+            
             Sigmam1v = torch.diag(1/S)
             projv = WOi.T @ V.T @ Sigmam1v
             projw = (U.T @ Vi).T
@@ -387,7 +381,6 @@ def compute_proj_KQT_DRONE_mem(model,srcname,num_seq,resname,save=True):
     """
     This function compute projection by doing an SVD of KQ^T
     It forms K,Q,V calibration tensors like compute_proj_SVD_mem or compute_proj_SVD_Eigen_mem.
-    It uses formulas from DRONE.
     Saving format is the same than for previous functions
     """
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

@@ -2,7 +2,7 @@
 
 Repository for the paper "KQ-SVD: Compressing the KV Cache with Provable Guarantees on Attention Fidelity"
 
-Requirements for the conda environment are are in ```environment.yml```.
+Requirements for the conda environment are in ```environment.yml```.
 
 To compute projections for Llama models use ```computing_proj.ipynb```.
 
